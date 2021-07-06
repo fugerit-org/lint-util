@@ -1,0 +1,267 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.fugerit.java</groupId>
+	<artifactId>lint-util</artifactId>
+
+	<version>0.6.0</version>
+	<packaging>jar</packaging>
+
+	<name>github-issue-export</name>
+	<description>Github Issue Export Tool</description>
+	<url>http://www.fugerit.org/java/</url>
+
+	<scm>
+		<connection>scm:git:git://github.com/fugerit-org/github-issue-export.git</connection>
+		<developerConnection>scm:git:ssh://github.com/fugerit-org/github-issue-export.git</developerConnection>
+		<url>http://github.com/fugerit-org/github-issue-export/tree/master</url>
+	</scm>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<fj-version>0.7.6.0</fj-version>
+		<fasterxml-jackson-core-version>2.12.1</fasterxml-jackson-core-version>
+		<fasterxml-jackson-databind-version>2.12.1</fasterxml-jackson-databind-version>
+		<slf4j-version>1.7.30</slf4j-version>
+	    <log4j-slf4j-impl-version>2.13.1</log4j-slf4j-impl-version>	    
+	    <junit-version>4.13.1</junit-version>
+	    <hsqldb-version>2.5.0</hsqldb-version>	       		
+	</properties>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Matteo a.k.a. Fugerit</name>
+			<email>m@fugerit.org</email>
+			<organization>Fugerit</organization>
+			<organizationUrl>http://www.fugerit.org</organizationUrl>
+		</developer>
+		<developer>
+			<name>Daneel</name>
+			<email>d@fugerit.org</email>
+			<organization>Fugerit</organization>
+			<organizationUrl>http://www.fugerit.org</organizationUrl>
+		</developer>
+	</developers>
+
+
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.fugerit.java</groupId>
+			<artifactId>fj-core</artifactId>
+			<version>${fj-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j-version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j-version}</version>
+			<scope>test</scope>
+		</dependency>	
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-slf4j-impl</artifactId>
+		    <version>${log4j-slf4j-impl-version}</version>
+		    <scope>test</scope>
+		</dependency>		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit-version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.jsoup</groupId>
+		    <artifactId>jsoup</artifactId>
+		    <version>1.13.1</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+		<plugins>
+		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.4</version>
+				<configuration>
+					<stylesheetfile>src/main/javadoc/stylesheet.css</stylesheetfile>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>		
+		
+		</plugins>
+
+	</build>
+
+	<profiles>
+
+		<profile>
+			<id>doRelease</id>
+			<build>
+				<plugins>
+
+
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.8</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverId>ossrh</serverId>
+							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+						</configuration>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.5</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+
+	<profile>
+		<id>singlepackage</id>
+		<build>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.0.2</version>
+					<configuration>
+						<archive>
+							<manifest>
+								<addClasspath>true</addClasspath>
+								<mainClass>org.fugerit.java.github.issue.export.GithubIssueExportMain</mainClass>
+							</manifest>
+						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<version>3.1.0</version>
+					<executions>
+						<execution>
+							<phase>package</phase>
+							<goals>
+								<goal>shade</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<finalName>dist-${project.artifactId}-${project.version}</finalName>
+					</configuration>
+				</plugin>
+			</plugins>
+		</build>
+	</profile>
+
+		<profile>
+			<id>jsonschema2pojo</id>
+			<build>
+				<plugins>
+					<plugin>
+						<!-- Genera gli oggetti di modello java per degli oggetti JSON : http://www.jsonschema2pojo.org/ 
+							https://github.com/joelittlejohn/jsonschema2pojo/wiki/Getting-Started -->
+						<groupId>org.jsonschema2pojo</groupId>
+						<artifactId>jsonschema2pojo-maven-plugin</artifactId>
+						<version>0.4.33</version>
+						<configuration>
+							<sourceType>json</sourceType>
+							<sourceDirectory>${project.basedir}/src/main/resources/pojo-config/json-source</sourceDirectory>
+							<targetPackage>org.fugerit.java.github.issue.export.model</targetPackage>
+							<!-- <sourceDirectory>${basedir}/src/main/resources/schema</sourceDirectory> 
+								<targetPackage>it.sogei.anpr.subentro.bpm.client.pojo</targetPackage> -->
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
+
+	<reporting>
+	    <plugins>
+	      <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-changelog-plugin</artifactId>
+	        <version>2.3</version>
+	      </plugin>
+	    </plugins>
+	  </reporting>
+
+	<organization>
+		<url>http://www.fugerit.org</url>
+		<name>Fugerit</name>
+	</organization>
+		
+</project>
