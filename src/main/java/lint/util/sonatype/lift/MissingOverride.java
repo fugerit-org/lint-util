@@ -27,9 +27,13 @@ public class MissingOverride {
 			String html = StreamIO.readString( reader );
 			Document doc = Jsoup.parse( html );
 			Elements aTag = doc.select("a[href]");
+			logger.info( "total href check : {}", aTag.size() );
+			int totalFound = 0;
+			int totalAdded = 0;
 			for (Element current : aTag) {
 				String href = current.attr("abs:href");
 				if ( href.startsWith( baseLink ) ) {
+					totalFound++;
 					String value = href.substring( baseLink.length() );
 					String[] data = value.split( "#" );
 					String filePath = data[0];
@@ -48,6 +52,7 @@ public class MissingOverride {
 									String pre = currentLine.substring( 0, index );
 									writer.println( pre+"@Override" );
 									logger.info( "Adding overrided to file {}, line {}", currentFile, line );
+									totalAdded++;
 								}
 								writer.println( currentLine );
 								currentLine = currentReader.readLine();
@@ -58,8 +63,8 @@ public class MissingOverride {
 						throw new ConfigException( "File does not exist : "+currentFile.getAbsolutePath() );
 					}
 				}
-				
 			}
+			logger.info( "total added / found {} / {}", totalAdded, totalFound );
 		} catch (IOException e) {
 			throw new ConfigException( e );
 		}

@@ -18,7 +18,7 @@ public class TestMissingOverride {
 	@Test
 	public void test() {
 		String file = "src/test/resources/missing_override/sonatype_lift_test.html";
-		String baseLink = "https://github.com/fugerit-org/fj-lib/blob/9ff3f1372362ba393fa3bbc662847739bf5129da/";
+		String baseLink = "https://github.com/fugerit-org/fj-lib/blob/6082febd88214d6caef0be27dbd225a73ce29952/";
 		String srcPath = "../fj-lib";
 		try ( Reader reader = new FileReader( file ) ) {
 			MissingOverride fun = new MissingOverride();
