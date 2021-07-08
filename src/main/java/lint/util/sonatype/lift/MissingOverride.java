@@ -80,20 +80,21 @@ public class MissingOverride {
 							while ( currentLine != null ) {
 								count++;
 								if ( line == count ) {
-									if ( ( currentLine.contains( "public" ) || currentLine.contains( "protected" ) ) && !currentLine.contains( "@Override" ) ) {
-										int index = currentLine.indexOf( "public" );
-										if ( index == -1 ) {
-											index = currentLine.indexOf( "protected" );
+									if ( !currentLine.contains( "@Override" ) ) {
+										int index = -1;
+										for ( int k=0; k<currentLine.length(); k++ ) {
+											if ( Character.isLetter( currentLine.charAt( k ) ) ) {
+												index = k;
+												break;
+											}
 										}
 										String pre = currentLine.substring( 0, index );
 										writer.println( pre+"@Override" );
 										//logger.info( "Adding overrided to file {}, line {}", currentFile, line );
 										totalAdded++;	
 									} else {
-										note.append( "[check public or protected:" );
-										note.append( currentLine.contains( "public" ) || currentLine.contains( "protected" )  );
-										note.append( ", contains override:" );
-										note.append( !currentLine.contains( "@Override" ) );
+										note.append( "[contains override:" );
+										note.append( currentLine.contains( "@Override" ) );
 										note.append( "]" );
 									}
 								}
